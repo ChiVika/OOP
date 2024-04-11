@@ -1,5 +1,7 @@
 import tkinter as tk
 import random
+from PIL import Image, ImageTk
+from auth import Auth
 
 class Game(tk.Tk):
     def __init__(self,parent):
@@ -167,3 +169,37 @@ class Game(tk.Tk):
 
     def input_numbers(self,enters):
         self.enters = enters
+
+
+
+class Start(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.auth = Auth()
+        self.title("Запомни число")
+        self.geometry("300x330+450+150")
+        self.resizable(False, False)  # запрет изменения размеров окна
+        self.config(bg="#DED2FF")
+
+        self.title1 = tk.Label(self,text="Запомни число",foreground="#8A75C4",bg="#DED2FF")
+        self.title1.config(font=("Arial", 20))
+        self.title1.place(x=50, y=22)
+
+        self.enter = tk.Button(self, text="Вход",foreground="#8A75C4",bg="#DED2FF",bd=0,command=self.Ent)
+        self.enter.config(font=("Arial", 13))
+        self.enter.place(x=125,y=250)
+
+        self.regist = tk.Button(self, text="Регистрация",foreground="#8A75C4",bg="#DED2FF",bd=0,command=self.reg)
+        self.regist.config(font=("Arial", 8))
+        self.regist.place(x=115,y=280)
+
+    def Ent(self):
+        self.auth.authorization()
+        self.destroy()
+
+    def reg(self):
+        self.auth.registration()
+        self.destroy()
+
+
+
