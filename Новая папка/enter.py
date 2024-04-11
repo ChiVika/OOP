@@ -1,5 +1,6 @@
 import tkinter as tk
 from game import Game
+from game import App
 class Enter(tk.Tk):
     def __init__(self,parent, game):
         super().__init__(parent)
@@ -62,3 +63,4 @@ class Enter(tk.Tk):
         inputs = [self.enter1.get(), self.enter2.get(), self.enter3.get(), self.enter4.get(), self.enter5.get(),
                   self.enter6.get()]
         self.game.checking(inputs)
+

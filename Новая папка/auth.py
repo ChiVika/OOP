@@ -24,26 +24,37 @@ class Auth(tk.Tk):
         self.resizable(False, False)  # запрет изменения размеров окна
         self.config(bg="#DED2FF")
 
-        self.username_label = tk.Label(self,text="Логин")
-        self.username_label.pack()
+        self.Title = tk.Label(self,text="Регистрация",foreground="#8A75C4",bg="#DED2FF")
+        self.Title.config(font=("Arial", 15))
+        self.Title.place(x=87,y=20)
 
-        self.username_enter = tk.Entry(self)
-        self.username_enter.pack()
+        self.username_label = tk.Label(self,text="Логин",foreground="#8A75C4",bg="#DED2FF")
+        self.username_label.config(font=("Arial", 10))
+        self.username_label.place(x=48,y=70)
 
-        self.passwor_label = tk.Label(self,text="Пароль")
-        self.passwor_label.pack()
+        self.username_enter = tk.Entry(self,bd=0,fg="#7362A2")
+        self.username_enter.config(width=30,font=("Arial", 10))
+        self.username_enter.place(x=50,y=95)
 
-        self.password_enter = tk.Entry(self,show="*")
-        self.password_enter.pack()
+        self.passwor_label = tk.Label(self,text="Пароль",foreground="#8A75C4",bg="#DED2FF")
+        self.passwor_label.config(font=("Arial", 10))
+        self.passwor_label.place(x=48,y=130)
 
-        self.passwor_label1 = tk.Label(self, text="Повторный пароль")
-        self.passwor_label1.pack()
+        self.password_enter = tk.Entry(self,show="*",bd=0,fg="#7362A2")
+        self.password_enter.config(width=30, font=("Arial", 10))
+        self.password_enter.place(x=50,y=155)
 
-        self.password_enter1 = tk.Entry(self,show="*")
-        self.password_enter1.pack()
+        self.passwor_label1 = tk.Label(self, text="Повторный пароль",foreground="#8A75C4",bg="#DED2FF")
+        self.passwor_label1.config(font=("Arial", 10))
+        self.passwor_label1.place(x=48,y=190)
+
+        self.password_enter1 = tk.Entry(self,show="*",bd=0,fg="#7362A2")
+        self.password_enter1.config(width=30, font=("Arial", 10))
+        self.password_enter1.place(x=50,y=215)
+
 
         self.button = tk.Button(self,text="Зарегистрироваться",command=self.registers)
-        self.button.pack()
+        self.button.place(x=87,y=270)
 
     def authorization(self):
         super().__init__()
@@ -52,20 +63,28 @@ class Auth(tk.Tk):
         self.resizable(False, False)  # запрет изменения размеров окна
         self.config(bg="#DED2FF")
 
-        self.username_labelA = tk.Label(self, text="Логин")
-        self.username_labelA.pack()
+        self.TitleA = tk.Label(self, text="Авторизация", foreground="#8A75C4", bg="#DED2FF")
+        self.TitleA.config(font=("Arial", 15))
+        self.TitleA.place(x=87, y=20)
 
-        self.username_enterA = tk.Entry(self)
-        self.username_enterA.pack()
+        self.username_labelA = tk.Label(self, text="Логин", foreground="#8A75C4", bg="#DED2FF")
+        self.username_labelA.config(font=("Arial", 10))
+        self.username_labelA.place(x=48, y=70)
 
-        self.passwor_labelA = tk.Label(self, text="Пароль")
-        self.passwor_labelA.pack()
+        self.username_enterA = tk.Entry(self, bd=0, fg="#7362A2")
+        self.username_enterA.config(width=30, font=("Arial", 10))
+        self.username_enterA.place(x=50, y=95)
 
-        self.password_enterA = tk.Entry(self,show="*")
-        self.password_enterA.pack()
+        self.passwor_labelA = tk.Label(self, text="Пароль", foreground="#8A75C4", bg="#DED2FF")
+        self.passwor_labelA.config(font=("Arial", 10))
+        self.passwor_labelA.place(x=48, y=130)
 
-        self.button1 = tk.Button(self, text="Войти",command=self.Auth)
-        self.button1.pack()
+        self.password_enterA = tk.Entry(self, show="*", bd=0, fg="#7362A2")
+        self.password_enterA.config(width=30, font=("Arial", 10))
+        self.password_enterA.place(x=50, y=155)
+
+        self.buttonA = tk.Button(self, text="Войти", command=self.Auth)
+        self.buttonA.place(x=127, y=270)
 
     def registers(self):
         self.database = sqlite3.connect("Users.db")
@@ -109,10 +128,11 @@ class Auth(tk.Tk):
         if not user:
             tk.messagebox.showerror("Ошибка", "Неверный логин или пароль!")
             return
+        from game import App
         self.database.close()
         self.destroy()
-        # app = App()
-        # app.mainloop()
+        app = App()
+        app.mainloop()
 
 
 
