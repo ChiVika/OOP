@@ -2,17 +2,22 @@ import tkinter as tk
 import random
 from PIL import Image, ImageTk
 from auth import Auth
+import sqlite3
 
 class Game(tk.Tk):
-    def __init__(self,parent):
+    def __init__(self,parent,user_id):
         self.parent = parent
         self.textboxes = []
+        self.user = Auth()
         self.index = 0
         self.arr = [0]*6
         self.proverka = 1
         self.ind = 0
         self.level = 1
         self.cnt = 0
+        self.data_level = 0
+        self.user_id = user_id
+
 
     def level_up(self):
         self.level += 1
@@ -176,24 +181,38 @@ class Game(tk.Tk):
             if self.cnt < 4:
                 self.show_modal_window_true(self.parent)
             else:
+                self.database = sqlite3.connect("Users.db")
+                self.cursor = self.database.cursor()
                 self.show_modal_window_victory(self.parent)
+                self.data_level = self.cnt
+                print(self.data_level)
                 self.cnt = 0
+                self.user_id = self.get_id()
+                self.cursor.execute("INSERT INTO statistic (id_user, level) VALUES (?, ?)",(self.user_id, self.data_level))
+                self.database.commit()
+                self.database.close()
             self.parent.start.config(state="normal")
             self.parent.repeat.config(state="disabled")
             self.parent.input_field.config(state="disabled")
             print("Успех")
 
         else:
+            self.database = sqlite3.connect("Users.db")
+            self.cursor = self.database.cursor()
             self.input_field.destroy()
             self.show_modal_window_false(self.parent)
+            self.data_level = self.cnt
+            print(self.data_level)
             self.level = 1
             self.update_level_label()
             self.cnt = 0
+            self.cursor.execute("INSERT INTO statistic (id_user, level) VALUES (?, ?)", (self.user_id, self.data_level))
+            self.database.commit()
+            self.database.close()
             self.parent.start.config(state="normal")
             self.parent.repeat.config(state="disabled")
             self.parent.input_field.config(state="disabled")
             print("неудача")
-
 
 
 
@@ -227,9 +246,10 @@ class Start(tk.Tk):
         self.destroy()
 
 class App(tk.Tk):
-    def __init__(self):
+    def __init__(self,user_id):
         super().__init__()
-        self.Game = Game(self)
+        self.Game = Game(self, user_id)
+        self.user_id = user_id
         self.title("Запомни число")
         self.geometry("869x508")
         self.resizable(False, False)  # запрет изменения размеров окна

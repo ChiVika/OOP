@@ -14,6 +14,15 @@ class Auth(tk.Tk):
                 Password TEXT
             )"""
         )
+        self.cursor.execute(
+            """CREATE TABLE IF NOT EXISTS statistic (
+                Number INTEGER PRIMARY KEY,
+                id_user INTEGER,
+                level INTEGER,
+                FOREIGN KEY (id_user) REFERENCES users(Id)
+            )"""
+        )
+        self.user_id = None
         self.database.commit()
         self.database.close()
 
@@ -128,11 +137,13 @@ class Auth(tk.Tk):
         if not user:
             tk.messagebox.showerror("Ошибка", "Неверный логин или пароль!")
             return
+        user_id = user[0]
         from game import App
         self.database.close()
         self.destroy()
-        app = App()
+        app = App(user_id)
         app.mainloop()
+        return user_id
 
 
 
