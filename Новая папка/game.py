@@ -3,6 +3,8 @@ import random
 from PIL import Image, ImageTk
 from auth import Auth
 import sqlite3
+from statistic import Statistica
+
 
 class Game(tk.Tk):
     def __init__(self,parent,user_id):
@@ -74,11 +76,12 @@ class Game(tk.Tk):
         self.textboxes = textboxes
         self.show_next_number()
     def field_for_input(self):
-        self.input_field = tk.Tk()
-        self.input_field.title("Запомни число")
-        self.input_field.geometry("630x251")
+        self.input_field = tk.Toplevel()
+        self.input_field.title("Ввести числа")
+        self.input_field.geometry("630x251+320+150")
         self.input_field.resizable(False, False)  # запрет изменения размеров окна
         self.input_field.config(bg="#ffffff")
+        self.input_field.grab_set()
 
         self.text_box1 = tk.Canvas(self.input_field, width=70, height=70, bg="#E2D8FF",highlightcolor="#8A75C4")
         self.text_box1.place(x=30, y=80)
@@ -187,7 +190,6 @@ class Game(tk.Tk):
                 self.data_level = self.cnt
                 print(self.data_level)
                 self.cnt = 0
-                self.user_id = self.get_id()
                 self.cursor.execute("INSERT INTO statistic (id_user, level) VALUES (?, ?)",(self.user_id, self.data_level))
                 self.database.commit()
                 self.database.close()
@@ -250,8 +252,9 @@ class App(tk.Tk):
         super().__init__()
         self.Game = Game(self, user_id)
         self.user_id = user_id
+        self.st = Statistica(self,user_id)
         self.title("Запомни число")
-        self.geometry("869x508")
+        self.geometry("869x508+200+50")
         self.resizable(False, False)  # запрет изменения размеров окна
         self.config(bg="#ffffff")
 
@@ -342,8 +345,16 @@ class App(tk.Tk):
         self.exit = tk.Button(new_frame,image=self.image2,command=new_frame.destroy, bg="#E2D8FF",bd=0)
         self.exit.place(x=160, y=10)
 
-        self.statistic = tk.Button(new_frame, text="Статистика",bg="#E2D8FF",bd=0,foreground="#8A75C4")
+        self.statistic = tk.Button(new_frame, text="Статистика",bg="#E2D8FF",bd=0,foreground="#8A75C4",command=lambda: [self.window_statistic(), new_frame.destroy()])
         self.statistic.config(font=("Arial", 10))
         self.statistic.place(x=55, y=100)
+    def window_statistic(self):
+        self.st.window_with_statistic()
+
+
+
+
+
+
 
 

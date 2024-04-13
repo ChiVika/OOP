@@ -29,7 +29,7 @@ class Auth(tk.Tk):
     def registration(self):
         super().__init__()
         self.title("Регистрация")
-        self.geometry("300x330")
+        self.geometry("300x330+450+150")
         self.resizable(False, False)  # запрет изменения размеров окна
         self.config(bg="#DED2FF")
 
@@ -68,7 +68,7 @@ class Auth(tk.Tk):
     def authorization(self):
         super().__init__()
         self.title("Запомни число")
-        self.geometry("300x330")
+        self.geometry("300x330+450+150")
         self.resizable(False, False)  # запрет изменения размеров окна
         self.config(bg="#DED2FF")
 
