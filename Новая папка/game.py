@@ -7,7 +7,7 @@ from statistic import Statistica
 
 
 class Game(tk.Tk):
-    def __init__(self,parent,user_id):
+    def __init__(self,parent,user_id,username):
         self.parent = parent
         self.textboxes = []
         self.user = Auth()
@@ -19,6 +19,7 @@ class Game(tk.Tk):
         self.cnt = 0
         self.data_level = 0
         self.user_id = user_id
+        self.username = username
 
 
     def level_up(self):
@@ -248,11 +249,12 @@ class Start(tk.Tk):
         self.destroy()
 
 class App(tk.Tk):
-    def __init__(self,user_id):
+    def __init__(self,user_id,username):
         super().__init__()
-        self.Game = Game(self, user_id)
+        self.Game = Game(self, user_id,username)
         self.user_id = user_id
-        self.st = Statistica(self,user_id)
+        self.username = username
+        self.st = Statistica(self,user_id,username)
         self.title("Запомни число")
         self.geometry("869x508+200+50")
         self.resizable(False, False)  # запрет изменения размеров окна
@@ -338,16 +340,16 @@ class App(tk.Tk):
         from auth import Auth
         new_frame = tk.Frame(self, width=200, height=600, bg="#E2D8FF")
         new_frame.place(x=0, y=0)
-        self.username = tk.Label(new_frame,text=f'username',bg="#E2D8FF",bd=0,foreground="#8A75C4")
-        self.username.config(font=("Arial", 15))
-        self.username.place(x=50, y=4)
+        self.username1 = tk.Label(new_frame,text=self.username,bg="#E2D8FF",bd=0,foreground="#8A75C4")
+        self.username1.config(font=("Arial", 15))
+        self.username1.place(relx=0.5, rely=0.03, anchor=tk.CENTER)
 
         self.exit = tk.Button(new_frame,image=self.image2,command=new_frame.destroy, bg="#E2D8FF",bd=0)
-        self.exit.place(x=160, y=10)
+        self.exit.place(x=160, y=12)
 
         self.statistic = tk.Button(new_frame, text="Статистика",bg="#E2D8FF",bd=0,foreground="#8A75C4",command=lambda: [self.window_statistic(), new_frame.destroy()])
         self.statistic.config(font=("Arial", 10))
-        self.statistic.place(x=55, y=100)
+        self.statistic.place(relx=0.5, rely=0.2, anchor=tk.CENTER)
     def window_statistic(self):
         self.st.window_with_statistic()
 

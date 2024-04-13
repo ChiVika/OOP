@@ -138,12 +138,13 @@ class Auth(tk.Tk):
             tk.messagebox.showerror("Ошибка", "Неверный логин или пароль!")
             return
         user_id = user[0]
+        username = user[1]
         from game import App
         self.database.close()
         self.destroy()
-        app = App(user_id)
+        app = App(user_id,username)
         app.mainloop()
-        return user_id
+        return user_id,username
 
 
 

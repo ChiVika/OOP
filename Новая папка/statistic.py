@@ -5,11 +5,10 @@ import sqlite3
 
 
 class Statistica(tk.Tk):
-    def __init__(self, parent, user_id):
+    def __init__(self, parent, user_id,username):
         self.parent = parent
         self.user_id = user_id
-
-
+        self.username = username
     def window_with_statistic(self):
         self.new_window = tk.Toplevel()
         self.new_window.title("Статистика")
