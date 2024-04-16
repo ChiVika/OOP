@@ -18,6 +18,7 @@ class Game(tk.Tk):
         self.level = 1
         self.cnt = 0
         self.data_level = 0
+        self.check_button_pressed = False
         self.parent.level = tk.Label(self.parent, text=f'Уровень {self.level}')
         self.user_id = user_id
         self.username = username
@@ -66,13 +67,11 @@ class Game(tk.Tk):
             self.index = 0
             # self.parent.after(1000, self.level_up)
     def hide_current_number(self):
-
         if self.index > 0:
             textbox = self.textboxes[self.index - 1]
             textbox.delete("all")
-            self.parent.after(1000, self.show_next_number)
-        else:
-            self.parent.after(1000, self.show_next_number)
+            # self.parent.after(1000, self.show_next_number)
+        self.parent.after(1000, self.show_next_number)
     def repeat(self,textboxes):
         self.textboxes = textboxes
         self.show_next_number()
@@ -127,8 +126,9 @@ class Game(tk.Tk):
         self.enter6.config(width=8, bd=0, font=("Arial", 10))
         self.enter6.place(x=8, y=28)
 
-        self.check = tk.Button(self.input_field, text="Проверить",command=self.checking)
-        self.check.place(x=280, y=180)
+        self.check = tk.Button(self.input_field, text="Проверить",command=self.checking,bd=0,foreground="#8A75C4", bg="#ffffff" )
+        self.check.config(font=("Arial", 15))
+        self.check.place(relx=0.5, rely=0.8,anchor=tk.CENTER)
 
     def show_modal_window_victory(self,parent):
         self.modal_window = tk.Toplevel(parent)
@@ -175,11 +175,28 @@ class Game(tk.Tk):
         self.close_button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 
     def checking(self):
+        print("Checking")
         self.inputs = [self.enter1.get(), self.enter2.get(), self.enter3.get(), self.enter4.get(), self.enter5.get(),
                        self.enter6.get()]
+        if not all(x.strip() for x in self.inputs):
+            print("We are come in")
+            self.label_error = tk.Label(self.input_field, text="Все поля должны быть заполнены", fg="red", bg="#ffffff")
+            self.label_error.place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+            self.input_field.after(2000, self.hide_error_label)
+            return
+
+        try:
+            self.inputs = [int(x) for x in self.inputs]
+        except ValueError:
+            print("Error! it is not numbers")
+            self.label_error = tk.Label(self.input_field, text="Должны вводится только цифры", fg="red",bg="#ffffff")
+            self.label_error.place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+            self.input_field.after(2000, self.hide_error_label)
+            return
+        self.inputs = list(map(int, self.inputs))
         flag = 1
         for i in range(len(self.arr)):
-            if int(self.inputs[i]) != self.arr[i]:
+            if self.inputs[i] != self.arr[i]:
                 flag = 0
                 break
         if flag == 1:
@@ -221,7 +238,8 @@ class Game(tk.Tk):
             self.parent.repeat.config(state="disabled")
             self.parent.input_field.config(state="disabled")
             print("неудача")
-
+    def hide_error_label(self):
+        self.label_error.place_forget()
 
 
 class Start(tk.Tk):
@@ -241,8 +259,8 @@ class Start(tk.Tk):
         self.enter.config(font=("Arial", 13))
         self.enter.place(x=125,y=250)
 
-        self.Exit_game = tk.Button(self,image=self.image2,command=self.destroy,bg="#DED2FF",bd=0)
-        self.Exit_game.place(x=260, y=10)
+        # self.Exit_game = tk.Button(self,image=self.image2,command=self.destroy,bg="#DED2FF",bd=0)
+        # self.Exit_game.place(x=260, y=10)
 
         self.regist = tk.Button(self, text="Регистрация",foreground="#8A75C4",bg="#DED2FF",bd=0,command=self.reg)
         self.regist.config(font=("Arial", 8))

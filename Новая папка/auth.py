@@ -62,8 +62,13 @@ class Auth(tk.Tk):
         self.password_enter1.place(x=50,y=215)
 
 
-        self.button = tk.Button(self,text="Зарегистрироваться",command=self.registers,fg="#8A75C4",bg="#DED2FF",bd=0,width=20)
-        self.button.place(relx=0.5, rely=0.9,anchor=tk.CENTER)
+        self.button = tk.Button(self,text="Зарегистрироваться",command=self.registers,fg="#8A75C4",bg="#DED2FF",bd=0)
+        self.button.config(font=("Arial",10))
+        self.button.place(relx=0.5, rely=0.82,anchor=tk.CENTER)
+
+        self.button1 = tk.Button(self, text="Авторизация",fg="#8A75C4", bg="#DED2FF",bd=0,command=self.Ent)
+        self.button1.config(font=("Arial", 8))
+        self.button1.place(relx=0.5, rely=0.9, anchor=tk.CENTER)
 
     def authorization(self):
         super().__init__()
@@ -97,7 +102,11 @@ class Auth(tk.Tk):
         self.imges_enters = tk.PhotoImage(file="images/en.png")
         self.buttonA = tk.Button(self,text="Вход", command=self.Auth,fg="#8A75C4",bg="#DED2FF",bd=0,width=20)
         self.buttonA.config(font=("Arial", 12))
-        self.buttonA.place(relx=0.5, rely=0.8,anchor=tk.CENTER)
+        self.buttonA.place(relx=0.5, rely=0.75,anchor=tk.CENTER)
+
+        self.buttonR = tk.Button(self, text="Регистрация", command=self.reg, fg="#8A75C4", bg="#DED2FF", bd=0)
+        self.buttonR.config(font=("Arial", 10))
+        self.buttonR.place(relx=0.5, rely=0.85, anchor=tk.CENTER)
     def registers(self):
         self.database = sqlite3.connect("Users.db")
         self.cursor = self.database.cursor()
@@ -107,18 +116,18 @@ class Auth(tk.Tk):
 
         if not self.user1 or not self.psw1 or not self.psw2:
             self.label_error = tk.Label(self, text="Все поля должны быть заполнены", fg="red", bg="#DED2FF")
-            self.label_error.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
+            self.label_error.place(relx=0.5, rely=0.75, anchor=tk.CENTER)
             self.after(2000, self.hide_error_label)
             return
 
         if self.psw1 != self.psw2:
             self.label_error = tk.Label(self, text="Пароли не совпадают!", fg="red", bg="#DED2FF")
-            self.label_error.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
+            self.label_error.place(relx=0.5, rely=0.75, anchor=tk.CENTER)
             self.after(2000, self.hide_error_label)
             return
         if len(self.psw1) <= 6:
             self.label_error = tk.Label(self, text="Пароль должен содержать больше 6 символов!", fg="red", bg="#DED2FF")
-            self.label_error.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
+            self.label_error.place(relx=0.5, rely=0.75, anchor=tk.CENTER)
             self.after(2000, self.hide_error_label)
             return
 
@@ -163,6 +172,16 @@ class Auth(tk.Tk):
 
     def hide_error_label(self):
         self.label_error.place_forget()
+
+    def Ent(self):
+        self.destroy()
+        self.authorization()
+
+
+    def reg(self):
+        self.destroy()
+        self.registration()
+
 
 
 
