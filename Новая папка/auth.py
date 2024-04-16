@@ -1,6 +1,6 @@
 import tkinter as tk
 import sqlite3
-
+from PIL import Image, ImageTk
 
 import tkinter.messagebox as messagebox
 class Auth(tk.Tk):
@@ -62,8 +62,8 @@ class Auth(tk.Tk):
         self.password_enter1.place(x=50,y=215)
 
 
-        self.button = tk.Button(self,text="Зарегистрироваться",command=self.registers)
-        self.button.place(x=87,y=270)
+        self.button = tk.Button(self,text="Зарегистрироваться",command=self.registers,fg="#8A75C4",bg="#DED2FF",bd=0,width=20)
+        self.button.place(relx=0.5, rely=0.9,anchor=tk.CENTER)
 
     def authorization(self):
         super().__init__()
@@ -72,9 +72,12 @@ class Auth(tk.Tk):
         self.resizable(False, False)  # запрет изменения размеров окна
         self.config(bg="#DED2FF")
 
+        image = Image.open("images/0.png")
+        photo = ImageTk.PhotoImage(image)
+
         self.TitleA = tk.Label(self, text="Авторизация", foreground="#8A75C4", bg="#DED2FF")
         self.TitleA.config(font=("Arial", 15))
-        self.TitleA.place(x=87, y=20)
+        self.TitleA.place(relx=0.5, rely=0.1,anchor=tk.CENTER)
 
         self.username_labelA = tk.Label(self, text="Логин", foreground="#8A75C4", bg="#DED2FF")
         self.username_labelA.config(font=("Arial", 10))
@@ -91,10 +94,10 @@ class Auth(tk.Tk):
         self.password_enterA = tk.Entry(self, show="*", bd=0, fg="#7362A2")
         self.password_enterA.config(width=30, font=("Arial", 10))
         self.password_enterA.place(x=50, y=155)
-
-        self.buttonA = tk.Button(self, text="Войти", command=self.Auth)
-        self.buttonA.place(x=127, y=270)
-
+        self.imges_enters = tk.PhotoImage(file="images/en.png")
+        self.buttonA = tk.Button(self,text="Вход", command=self.Auth,fg="#8A75C4",bg="#DED2FF",bd=0,width=20)
+        self.buttonA.config(font=("Arial", 12))
+        self.buttonA.place(relx=0.5, rely=0.8,anchor=tk.CENTER)
     def registers(self):
         self.database = sqlite3.connect("Users.db")
         self.cursor = self.database.cursor()
@@ -103,18 +106,26 @@ class Auth(tk.Tk):
         self.psw2 = self.password_enter1.get()
 
         if not self.user1 or not self.psw1 or not self.psw2:
-            messagebox.showerror("Ошибка", "Все поля должны быть заполнены!")
+            self.label_error = tk.Label(self, text="Все поля должны быть заполнены", fg="red", bg="#DED2FF")
+            self.label_error.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
+            self.after(2000, self.hide_error_label)
             return
 
         if self.psw1 != self.psw2:
-            messagebox.showerror("Ошибка", "Пароли не совпадают!")
+            self.label_error = tk.Label(self, text="Пароли не совпадают!", fg="red", bg="#DED2FF")
+            self.label_error.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
+            self.after(2000, self.hide_error_label)
+            return
+        if len(self.psw1) <= 6:
+            self.label_error = tk.Label(self, text="Пароль должен содержать больше 6 символов!", fg="red", bg="#DED2FF")
+            self.label_error.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
+            self.after(2000, self.hide_error_label)
             return
 
         self.cursor.execute("INSERT INTO Users (Login, Password) VALUES (?, ?)", (self.user1, self.psw1))
         self.database.commit()
 
 
-        # messagebox.showinfo("Успех", "Регистрация прошла успешно!")
         self.database.close()
         self.destroy()
         self.authorization()
@@ -129,13 +140,17 @@ class Auth(tk.Tk):
         self.psw1 = self.password_enterA.get()
 
         if not self.user1 or not self.psw1:
-            tk.messagebox.showerror("Ошибка", "Все поля должны быть заполнены!")
+            self.label_error = tk.Label(self, text="Все поля должны быть заполнены!", fg="red", bg="#DED2FF")
+            self.label_error.place(relx=0.5,rely=0.6,anchor=tk.CENTER)
+            self.after(2000,self.hide_error_label)
+
             return
-        # Проверяем, что такой пользователь зарегистрирован
         self.cursor.execute("SELECT * FROM Users WHERE Login=? AND Password=?",(self.user1,self.psw1))
         user = self.cursor.fetchone()
         if not user:
-            tk.messagebox.showerror("Ошибка", "Неверный логин или пароль!")
+            self.label_error = tk.Label(self,text="Неверный логин или пароль!",fg="red",bg="#DED2FF")
+            self.label_error.place(relx=0.5,rely=0.6,anchor=tk.CENTER)
+            self.after(2000, self.hide_error_label)
             return
         user_id = user[0]
         username = user[1]
@@ -145,6 +160,9 @@ class Auth(tk.Tk):
         app = App(user_id,username)
         app.mainloop()
         return user_id,username
+
+    def hide_error_label(self):
+        self.label_error.place_forget()
 
 
 

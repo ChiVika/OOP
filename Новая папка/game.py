@@ -3,7 +3,7 @@ import random
 from PIL import Image, ImageTk
 from auth import Auth
 import sqlite3
-from statistic import Statistica
+from statistic import Statistica,AboutGame
 
 
 class Game(tk.Tk):
@@ -18,6 +18,7 @@ class Game(tk.Tk):
         self.level = 1
         self.cnt = 0
         self.data_level = 0
+        self.parent.level = tk.Label(self.parent, text=f'Уровень {self.level}')
         self.user_id = user_id
         self.username = username
 
@@ -26,12 +27,11 @@ class Game(tk.Tk):
         self.level += 1
         if self.level > 4:
             self.level = 1
-            self.update_level_label()
-        # self.show_number(self.textboxes)
         self.update_level_label()
 
     def update_level_label(self):
         self.parent.level.config(text=f'Уровень {self.level}')
+        return
     def generation(self):
         arr = [0]*6
         for i in range(len(arr)):
@@ -84,6 +84,7 @@ class Game(tk.Tk):
         self.input_field.config(bg="#ffffff")
         self.input_field.grab_set()
 
+
         self.text_box1 = tk.Canvas(self.input_field, width=70, height=70, bg="#E2D8FF",highlightcolor="#8A75C4")
         self.text_box1.place(x=30, y=80)
 
@@ -132,43 +133,46 @@ class Game(tk.Tk):
     def show_modal_window_victory(self,parent):
         self.modal_window = tk.Toplevel(parent)
         self.modal_window.title("Победа")
-        self.modal_window.geometry("300x150")
+        self.modal_window.geometry("300x150+480+200")
         self.modal_window.resizable(False, False)  # запрет изменения размеров окна
         self.modal_window.config(bg="#ffffff")
         self.modal_window.grab_set()
-        self.label_modal_true = tk.Label(self.modal_window, text="Вы прошли игру")
-        self.label_modal_true.pack()
+        self.label_modal_true = tk.Label(self.modal_window, text="Вы прошли игру",foreground="#8A75C4",bg="#ffffff",bd=0)
+        self.label_modal_true.config(font=("Arial", 15))
+        self.label_modal_true.place(relx=0.5, rely=0.3, anchor=tk.CENTER)
 
-        self.close_button = tk.Button(self.modal_window, text="Закрыть", command=self.modal_window.destroy)
-        self.close_button.pack()
+        self.close_button = tk.Button(self.modal_window, text="Продолжить",foreground="#8A75C4",bg="#ffffff",bd=0,command=self.modal_window.destroy)
+        self.close_button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
     def show_modal_window_true(self,parent):
         # создаем модальное окно
         self.modal_window = tk.Toplevel(parent)
         self.modal_window.title("Уровень пройден")
-        self.modal_window.geometry("300x150")
+        self.modal_window.geometry("300x150+480+200")
         self.modal_window.resizable(False, False)  # запрет изменения размеров окна
         self.modal_window.config(bg="#ffffff")
         self.modal_window.grab_set()
-        self.label_modal_true = tk.Label(self.modal_window,text="Уровень пройден")
-        self.label_modal_true.pack()
+        self.label_modal_true = tk.Label(self.modal_window,text="Уровень пройден",foreground="#8A75C4",bg="#ffffff",bd=0)
+        self.label_modal_true.config(font=("Arial", 15))
+        self.label_modal_true.place(relx=0.5, rely=0.3, anchor=tk.CENTER)
 
-        self.close_button = tk.Button(self.modal_window, text="Закрыть", command=self.modal_window.destroy)
-        self.close_button.pack()
+        self.close_button = tk.Button(self.modal_window, text="Продолжить",foreground="#8A75C4",bg="#ffffff",bd=0, command=self.modal_window.destroy)
+        self.close_button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 
 
     def show_modal_window_false(self,parent):
         # создаем модальное окно
         self.modal_window = tk.Toplevel(parent)
         self.modal_window.title("Вы проиграли")
-        self.modal_window.geometry("300x150")
+        self.modal_window.geometry("300x150+480+200")
         self.modal_window.resizable(False, False)  # запрет изменения размеров окна
         self.modal_window.config(bg="#ffffff")
         self.modal_window.grab_set()
-        self.label_modal_false = tk.Label(self.modal_window,text="Вы проиграли")
-        self.label_modal_false.pack()
+        self.label_modal_false = tk.Label(self.modal_window,text="Вы проиграли",foreground="#8A75C4",bg="#ffffff",bd=0)
+        self.label_modal_false.config(font=("Arial", 15))
+        self.label_modal_false.place(relx=0.5, rely=0.3, anchor=tk.CENTER)
 
-        self.close_button = tk.Button(self.modal_window, text="Закрыть", command=self.modal_window.destroy)
-        self.close_button.pack()
+        self.close_button = tk.Button(self.modal_window, text="Продолжить",foreground="#8A75C4",bg="#ffffff",bd=0, command=self.modal_window.destroy)
+        self.close_button.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
 
     def checking(self):
         self.inputs = [self.enter1.get(), self.enter2.get(), self.enter3.get(), self.enter4.get(), self.enter5.get(),
@@ -199,6 +203,7 @@ class Game(tk.Tk):
             self.parent.input_field.config(state="disabled")
             print("Успех")
 
+
         else:
             self.database = sqlite3.connect("Users.db")
             self.cursor = self.database.cursor()
@@ -227,7 +232,7 @@ class Start(tk.Tk):
         self.geometry("300x330+450+150")
         self.resizable(False, False)  # запрет изменения размеров окна
         self.config(bg="#DED2FF")
-
+        self.image2 = tk.PhotoImage(file="images/0.png")
         self.title1 = tk.Label(self,text="Запомни число",foreground="#8A75C4",bg="#DED2FF")
         self.title1.config(font=("Arial", 20))
         self.title1.place(x=50, y=22)
@@ -235,6 +240,9 @@ class Start(tk.Tk):
         self.enter = tk.Button(self, text="Вход",foreground="#8A75C4",bg="#DED2FF",bd=0,command=self.Ent)
         self.enter.config(font=("Arial", 13))
         self.enter.place(x=125,y=250)
+
+        self.Exit_game = tk.Button(self,image=self.image2,command=self.destroy,bg="#DED2FF",bd=0)
+        self.Exit_game.place(x=260, y=10)
 
         self.regist = tk.Button(self, text="Регистрация",foreground="#8A75C4",bg="#DED2FF",bd=0,command=self.reg)
         self.regist.config(font=("Arial", 8))
@@ -255,6 +263,7 @@ class App(tk.Tk):
         self.user_id = user_id
         self.username = username
         self.st = Statistica(self,user_id,username)
+        self.about_game = AboutGame(self)
         self.title("Запомни число")
         self.geometry("869x508+200+50")
         self.resizable(False, False)  # запрет изменения размеров окна
@@ -348,10 +357,27 @@ class App(tk.Tk):
         self.exit.place(x=160, y=12)
 
         self.statistic = tk.Button(new_frame, text="Статистика",bg="#E2D8FF",bd=0,foreground="#8A75C4",command=lambda: [self.window_statistic(), new_frame.destroy()])
-        self.statistic.config(font=("Arial", 10))
+        self.statistic.config(font=("Arial", 15))
         self.statistic.place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+
+        self.abouts = tk.Button(new_frame, text="Об игре", bg="#E2D8FF", bd=0, foreground="#8A75C4",command=lambda: [self.about(), new_frame.destroy()])
+        self.abouts.config(font=("Arial", 15))
+        self.abouts.place(relx=0.5, rely=0.3, anchor=tk.CENTER)
+
+        self.Enter_from_game = tk.Button(new_frame, text="выход", bg="#E2D8FF", bd=0, foreground="#8A75C4",command=self.enter_from_close)
+        self.Enter_from_game.config(font=("Arial", 15))
+        self.Enter_from_game.place(relx=0.5, rely=0.8, anchor=tk.CENTER)
+
+
     def window_statistic(self):
         self.st.window_with_statistic()
+    def enter_from_close(self):
+        self.destroy()
+        start_window = Start()
+        start_window.mainloop()
+    def about(self):
+        self.about_game.main_window()
+
 
 
 

@@ -44,7 +44,15 @@ class Statistica(tk.Tk):
             self.canvas.create_text(225, cnt * 30, text=f"{row[0]}", font=("Arial", 16),fill="#8A75C4")
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
         self.database.close()
-
+class AboutGame(tk.Tk):
+    def __init__(self, parent):
+        self.parent = parent
+    def main_window(self):
+        self.new_window1 = tk.Toplevel()
+        self.new_window1.title("Об игре")
+        self.new_window1.geometry("200x250+420+70")
+        self.new_window1.resizable(False, False)
+        self.new_window1.config(bg="#DED2FF")
 
         
 
